@@ -18,10 +18,10 @@ export const S7 = () => {
       <Word text="МОДЕЛИ" at={8} y={420} size={150} red />
       <div style={{position: 'absolute', left: 540 - line / 2, top: 590, width: line, height: 10, background: C.red,
         boxShadow: `0 0 24px ${C.red}`}} />
-      <div style={{position: 'absolute', top: 1380, width: 1080, textAlign: 'center', fontFamily, fontWeight: 500,
+      <div style={{position: 'absolute', top: 1320, width: 1080, textAlign: 'center', fontFamily, fontWeight: 500,
         fontSize: 64, letterSpacing: 3, color: C.white, opacity: contact, transform: `translateY(${(1 - contact) * 30}px)`,
         textShadow: '0 4px 20px rgba(0,0,0,0.8)'}}>
-        +7 000 000-00-00<br /><span style={{color: C.gold, fontSize: 52}}>@КОНТАКТЫ</span>
+        ПО ВСЕМ ВОПРОСАМ<br /><span style={{color: C.gold, fontSize: 64}}>ПИСАТЬ В DIRECT</span>
       </div>
     </>
   );
