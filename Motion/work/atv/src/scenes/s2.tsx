@@ -10,7 +10,7 @@ export const S2 = () => {
   return (
     <>
       <Photo src="c.jpg" fx={0.235} fy={0.73} zoom={zoom} sx={560 + s.x} sy={1150 + s.y} filter="contrast(1.2) saturate(1.15)" />
-      <Word text="МОЩЬ" at={4} y={330} size={260} red />
+      <Word text="МОЩЬ" at={4} y={300} size={260} />
     </>
   );
 };

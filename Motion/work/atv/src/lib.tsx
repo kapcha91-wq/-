@@ -11,19 +11,31 @@ Promise.all(['500', '700'].map((w) => new FontFace('Oswald', `url(${staticFile(`
 export const C = {bg: '#0E0F12', red: '#E0242E', gold: '#F2A640', white: '#F5F2EC'};
 export const ease = Easing.bezier(0.22, 1, 0.36, 1);
 
-/** Photo placed so that image point (fx,fy) (0..1) sits at screen point (sx,sy). zoom 1 = cover 1080x1920. */
+/** Photo placed so that image point (fx,fy) (0..1) sits at screen point (sx,sy). zoom 1 = cover 1080x1920.
+ *  With `cut` (вырезанный квадроцикл) — два слоя: фон (размыт, свой зум/сдвиг) и квадроцикл поверх → параллакс. */
 export const Photo: React.FC<{
   src: string; fx: number; fy: number; zoom: number; sx?: number; sy?: number; rot?: number;
   filter?: string; children?: React.ReactNode;
-}> = ({src, fx, fy, zoom, sx = 540, sy = 960, rot = 0, filter, children}) => {
-  const W = 1440 * zoom, H = 1920 * zoom;
+  cut?: string; bgZoom?: number; bgDx?: number; bgDy?: number; bgBlur?: number;
+}> = ({src, fx, fy, zoom, sx = 540, sy = 960, rot = 0, filter, children, cut, bgZoom, bgDx = 0, bgDy = 0, bgBlur = 5}) => {
+  const layer = (z: number, x: number, y: number, img: string, flt: string | undefined, kids?: React.ReactNode) => {
+    const W = 1440 * z, H = 1920 * z;
+    return (
+      <div style={{position: 'absolute', width: W, height: H, left: x - fx * W, top: y - fy * H,
+        transformOrigin: `${fx * 100}% ${fy * 100}%`, transform: `rotate(${rot}deg)`}}>
+        <Img src={staticFile(img)} style={{width: '100%', height: '100%', filter: flt}} />
+        {kids}
+      </div>
+    );
+  };
   return (
     <AbsoluteFill style={{overflow: 'hidden', background: C.bg}}>
-      <div style={{position: 'absolute', width: W, height: H, left: sx - fx * W, top: sy - fy * H,
-        transformOrigin: `${fx * 100}% ${fy * 100}%`, transform: `rotate(${rot}deg)`}}>
-        <Img src={staticFile(src)} style={{width: '100%', height: '100%', filter}} />
-        {children}
-      </div>
+      {cut ? (
+        <>
+          {layer((bgZoom ?? zoom) * 1.04, sx + bgDx, sy + bgDy, src, `${filter ?? ''} blur(${bgBlur}px) brightness(0.85)`)}
+          {layer(zoom, sx, sy, cut, `${filter ?? ''} drop-shadow(0 30px 40px rgba(0,0,0,0.55))`, children)}
+        </>
+      ) : layer(zoom, sx, sy, src, filter, children)}
     </AbsoluteFill>
   );
 };

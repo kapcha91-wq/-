@@ -8,7 +8,7 @@ export const S7 = () => {
   const contact = interpolate(f, [24, 34], [0, 1], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'});
   return (
     <>
-      <Photo src="a.jpg" fx={0.55} fy={0.6} zoom={zoom} sx={540} sy={1060} filter="contrast(1.12) saturate(1.15)">
+      <Photo src="a.jpg" cut="a-cut.png" bgZoom={1.2 + (zoom - 1.12) * 0.3} bgBlur={4} fx={0.55} fy={0.6} zoom={zoom} sx={540} sy={1060} filter="contrast(1.12) saturate(1.15)">
         <Glow x={0.555} y={0.575} r={110} color="#ffffff" o={0.7} />
         <Glow x={0.82} y={0.555} r={95} color="#ffffff" o={0.7} />
         <Glow x={0.74} y={0.5} r={80} color={C.red} o={0.6} />
