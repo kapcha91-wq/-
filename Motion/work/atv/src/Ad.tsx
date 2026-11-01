@@ -34,11 +34,11 @@ export const Ad = () => {
         <Sequence key={i} from={starts[i]} durationInFrames={starts[i + 1] - starts[i]}><S /></Sequence>
       ))}
       <Grade />
-      <Flash at={T.s2} len={5} />
+      <Flash at={T.s2} len={2} />
       <Shutter at={T.s3} />
       <Blackout at={T.s4} />
-      <Flash at={T.s5} len={4} />
-      <Flash at={T.s7} color={C.gold} len={5} />
+      <Flash at={T.s5} len={2} />
+      <Flash at={T.s7} color={C.gold} len={3} />
     </AbsoluteFill>
   );
 };
