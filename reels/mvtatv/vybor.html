@@ -1,0 +1,58 @@
+<!doctype html><html lang="ru"><head><meta charset="utf-8">
+<link rel="stylesheet" href="fonts.css"><link rel="stylesheet" href="common.css">
+<style>
+.title { left: 510px; transform: translateX(-50%); white-space: nowrap; font-weight: 900; text-align: center; }
+#t1 { top: 292px; font-size: 96px; text-shadow: 0 8px 0 #0a1a4d; }
+#t2 { top: 396px; font-size: 112px; color: #FFD23F; text-shadow: 0 10px 0 #b8441a; }
+#sub { left: 510px; top: 540px; transform: translateX(-50%); font: 600 34px/1.3 'Unb', 'Noto Color Emoji'; text-align: center; white-space: nowrap; }
+#grid { left: 130px; top: 642px; width: 760px; height: 869px; }
+.cell { position: absolute; width: 372px; height: 279px; }
+.cell .fr { position: absolute; inset: 0; background: #fff; border-radius: 26px; padding: 8px; box-shadow: 0 16px 40px rgba(0,0,0,.45); }
+.cell img { width: 100%; height: 100%; object-fit: cover; border-radius: 19px; display: block; }
+.cell .n { position: absolute; left: -14px; top: -16px; width: 76px; height: 76px; border-radius: 50%; background: #FFD23F; color: #0d2160;
+  font: 900 40px/70px 'Unb'; text-align: center; border: 4px solid #fff; box-shadow: 0 6px 18px rgba(0,0,0,.4); }
+.cell .c { position: absolute; right: 18px; bottom: 18px; padding: 6px 14px; border-radius: 14px; background: rgba(8,19,51,.82); font: 800 22px 'Unb'; white-space: nowrap; }
+.st { left: 510px; top: 1076px; opacity: 0; z-index: 10; }
+#st1 { background: #FFD23F; color: #0d2160; font-size: 54px; }
+</style></head><body>
+<div id="bg"></div><canvas id="snow"></canvas>
+<div class="abs badge" id="badge">@mvtatv · <b>доставка по всей России</b> 🚚</div>
+<div class="abs title" id="t1">ВЫБЕРИ</div>
+<div class="abs title" id="t2">ТОЛЬКО 1</div>
+<div class="abs" id="sub">что подаришь ребёнку<br>на Новый год? 🎁</div>
+<div class="abs" id="grid"></div>
+<div class="abs sticker st" id="st1">Какой забираешь?<br>Пиши номер 👇</div>
+<script src="lib.js"></script><script src="products.js"></script>
+<script>
+const $ = id => document.getElementById(id);
+const snow = makeSnow($('snow'), 95, 23);
+const ORDER = ['G63', 'FT908', '6666', '009', '5688', '800'];
+const cells = ORDER.map((k, i) => {
+  const d = document.createElement('div'); d.className = 'cell';
+  d.style.left = (i % 2) * 388 + 'px'; d.style.top = Math.floor(i / 2) * 295 + 'px';
+  d.innerHTML = `<div class="fr"><img src="${PRODUCTS[k].img}"></div><div class="n">${i + 1}</div><div class="c">${PRODUCTS[k].label}</div>`;
+  $('grid').appendChild(d); return d; });
+const H0 = 1.5, HOP = 0.5, HOPS = 12, CTA = 7.6, DUR = 9.6;
+window.seek = t => {
+  snow(t);
+  $('badge').style.opacity = eOut(seg(t, 0, 0.3));
+  $('t1').style.transform = `translateX(-50%) scale(${eBack(seg(t, 0, 0.35), 2.2)})`;
+  $('t2').style.transform = `translateX(-50%) scale(${eBack(seg(t, 0.15, 0.5), 2.6) * (1 + 0.04 * Math.sin(t * 6.28 * 2) * (t > 0.6))}) rotate(${-2 + Math.sin(t * 3) * 1.2}deg)`;
+  const s = eOut(seg(t, 0.3, 0.65)); $('sub').style.opacity = s; $('sub').style.transform = `translateX(-50%) translateY(${(1 - s) * 30}px)`;
+  const hop = t >= H0 && t < H0 + HOP * HOPS ? Math.floor((t - H0) / HOP) : -1, act = hop >= 0 ? hop % 6 : -1;
+  const since = hop >= 0 ? t - H0 - hop * HOP : 0, pk = eOut(clamp(since / 0.12));
+  const dimAll = eOut(seg(t, CTA, CTA + 0.3));
+  cells.forEach((c, i) => {
+    const pin = eBack(seg(t, 0.35 + 0.1 * i, 0.7 + 0.1 * i), 1.8);
+    const on = i === act, sc = pin * (on ? 1 + 0.08 * pk : 1);
+    c.style.transform = `scale(${sc}) rotate(${on ? (i % 2 ? 1.5 : -1.5) * pk : 0}deg)`;
+    c.style.zIndex = on ? 5 : 1; c.style.opacity = clamp(pin * 3);
+    const fr = c.firstChild; fr.style.background = on ? '#FFD23F' : '#fff';
+    fr.style.boxShadow = on ? `0 0 ${60 * pk}px rgba(255,210,63,.85), 0 16px 40px rgba(0,0,0,.45)` : '0 16px 40px rgba(0,0,0,.45)';
+    const dim = act >= 0 && !on ? 0.55 : 1;
+    c.style.filter = `brightness(${dim * (1 - 0.55 * dimAll)})`;
+  });
+  popSticker($('st1'), t, CTA + 0.1, 99, -3);
+};
+window.DUR = DUR; window.seek(0);
+</script></body></html>
