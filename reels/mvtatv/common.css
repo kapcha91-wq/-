@@ -1,0 +1,14 @@
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html, body { width: 1080px; height: 1920px; overflow: hidden; background: #0a1638; }
+body { font-family: 'Unb', 'Inter', 'Noto Color Emoji', sans-serif; color: #fff; position: relative; }
+#bg { position: absolute; inset: 0; background:
+  radial-gradient(1100px 900px at 50% 38%, #2350b8 0%, #163a8e 38%, #0d2160 70%, #081333 100%); }
+#snow { position: absolute; inset: 0; }
+.abs { position: absolute; }
+.badge { left: 50%; top: 236px; transform: translateX(-50%); padding: 14px 30px; border-radius: 40px;
+  background: rgba(255,255,255,.14); border: 2px solid rgba(255,255,255,.28); white-space: nowrap;
+  font: 600 30px 'Inter', 'Noto Color Emoji', sans-serif; letter-spacing: .3px; }
+.badge b { color: #FFD23F; font-weight: 800; }
+.yel { color: #FFD23F; }
+.sticker { padding: 26px 40px; border-radius: 34px; font-weight: 800; text-align: center; line-height: 1.12;
+  box-shadow: 0 18px 50px rgba(0,0,0,.45); white-space: nowrap; }

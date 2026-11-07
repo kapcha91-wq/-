@@ -1,0 +1,22 @@
+# Игровые рилсы для @mvtatv
+
+Детские электромобили, квадроциклы, снегоходы. Вертикальное видео 1080×1920, 30 к/с.
+
+Готово: `out/1_ugadaj-cenu_baggi.mp4` («Угадай цену», 14,4 с, женский голос Piper «Ирина»).
+
+## Как пересобрать
+
+```bash
+# голос (нужна модель ru-irinia-medium.onnx из rhasspy/piper v0.0.2 и pip install piper-tts)
+python tts.py vo_lines.json vo path/to/ru-irinia-medium.onnx
+# кадры, звук, видео
+node render.js ugaday.html fr_ugaday 14.4 30
+python mix.py fr_ugaday/sfx.json sched_ugaday.json fr_ugaday/mix.wav
+ffmpeg -framerate 30 -i fr_ugaday/%05d.jpg -i fr_ugaday/mix.wav -c:v libx264 -crf 18 -pix_fmt yuv420p \
+  -c:a aac -b:a 192k -shortest -movflags +faststart out/1_ugadaj-cenu_baggi.mp4
+```
+
+- Каждый кадр строится функцией `seek(t)` в HTML, звуки страница отдаёт в `window.SFX`.
+- Время фраз голоса задаётся в `sched_*.json`, звуковые эффекты синтезирует `sfx_lib.py`.
+- Надписи держатся в пределах x 80–940 и y 230–1500, чтобы их не закрывали кнопки и подпись Instagram.
+- Шрифт Unbounded (лицензия SIL OFL), фото товара `src/buggy.jpg` взято из рилса @mvtatv.
