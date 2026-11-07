@@ -1,0 +1,26 @@
+<!doctype html><html lang="ru"><head><meta charset="utf-8"><link rel="stylesheet" href="fonts.css"><link rel="stylesheet" href="common.css"><link rel="stylesheet" href="kit.css"><style>
+.tag { position: absolute; right: -12px; top: -16px; padding: 8px 16px; border-radius: 18px; background: #FFD23F; color: #0d2160; font: 900 30px 'Unb'; z-index: 4;
+  box-shadow: 0 6px 16px rgba(0,0,0,.35); }
+#coin { position: absolute; width: 120px; height: 120px; font: 100px/120px 'Noto Color Emoji'; text-align: center; z-index: 10; }
+</style></head><body class="th-purple"><script src="lib.js"></script><script src="products.js"></script><script src="kit.js"></script><script>
+const bs = base(41), hd = header({ l1: 'КАКАЯ САМАЯ', s1: 80, l2: 'ДОРОГАЯ?', s2: 120, top: 300, sub: '4 машины — одна стоит больше всех' });
+const K = ['5688', '6666', 'G63', '9166'], P = [[300, 828], [722, 828], [300, 1166], [722, 1166]];
+const cards = K.map((k, i) => { const d = card(k, P[i][0], P[i][1], 400, 300, { num: i + 1 }); d.tag = el('div', 'tag', '₽ ?', d); return d; });
+const coin = el('div', null, '💰'); coin.id = 'coin';
+const dm = dim(); Object.assign(dm.style, { left: '70px', top: '650px', right: 'auto', bottom: 'auto', width: '880px', height: '700px', borderRadius: '30px' }); const st = cta('Пиши номер 👇<br><span style="font-size:38px">ответ — в закрепе 📌</span>', 1000);
+const HOPS = [2.4, 2.8, 3.2, 3.6, 4.0, 4.45, 4.95, 5.5, 6.1], ORDERH = [0, 3, 1, 2, 3, 0, 2, 1, 3];
+window.seek = t => {
+  bs(t); hd(t);
+  cards.forEach((c, i) => { const p = eBack(seg(t, 0.5 + 0.25 * i, 0.95 + 0.25 * i), 1.5);
+    c.style.transform = `translateX(${(1 - p) * (i % 2 ? 800 : -800)}px) rotate(${(i % 2 ? 2 : -2) * (1 - p) * 8 + Math.sin(t * 2 + i) * 0.8}deg)`;
+    const tg = eBack(seg(t, 1.6 + 0.12 * i, 1.9 + 0.12 * i), 2.5); c.tag.style.transform = `scale(${tg * (1 + 0.08 * Math.sin(t * 9 + i))})`; });
+  let h = -1; for (let i = 0; i < HOPS.length; i++) if (t >= HOPS[i]) h = i;
+  const vis = t >= HOPS[0] && t < 6.7;
+  if (h >= 0) { const a = ORDERH[h], b = h > 0 ? ORDERH[h - 1] : a, u = eOut(clamp((t - HOPS[h]) / 0.25));
+    const x = lerp(P[b][0], P[a][0], u), y = lerp(P[b][1], P[a][1], u) - Math.sin(u * Math.PI) * 120;
+    coin.style.left = x - 60 + 'px'; coin.style.top = y - 60 + 'px'; }
+  coin.style.opacity = vis ? 1 : 0; coin.style.transform = `scale(${vis ? 1 + 0.1 * Math.sin(t * 14) : 0})`;
+  dm.style.opacity = eOut(seg(t, 6.8, 7.1)); popSticker(st, t, 6.9, 99, -3);
+};
+window.DUR = 9.5; window.seek(0);
+</script></body></html>

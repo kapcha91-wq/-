@@ -1,0 +1,29 @@
+<!doctype html><html lang="ru"><head><meta charset="utf-8"><link rel="stylesheet" href="fonts.css"><link rel="stylesheet" href="common.css"><link rel="stylesheet" href="kit.css"><style>
+.rnd { position: absolute; left: 22px; top: 22px; padding: 8px 18px; border-radius: 18px; background: rgba(8,19,51,.85); font: 900 34px 'Unb'; z-index: 3; }
+.cd { position: absolute; right: 22px; top: 22px; width: 110px; height: 110px; border-radius: 50%; background: #FFD23F; color: #0d2160; font: 900 64px/110px 'Unb'; text-align: center; z-index: 3; box-shadow: 0 6px 18px rgba(0,0,0,.4); }
+.q { position: absolute; left: 50%; bottom: 26px; transform: translateX(-50%); padding: 10px 26px; border-radius: 22px; background: rgba(8,19,51,.85); font: 800 36px 'Unb', 'Noto Color Emoji'; white-space: nowrap; z-index: 3; }
+</style></head><body class="th-green"><script src="lib.js"></script><script src="products.js"></script><script src="kit.js"></script><script>
+const bs = base(61), hd = header({ l1: 'УЗНАЕШЬ', l2: 'ПО ДЕТАЛИ?', s2: 92, sub: '4 раунда — считай, сколько угадаешь' });
+const R = [{ k: 'G63', f: [1027, 433] }, { k: '800', f: [1020, 350] }, { k: 'T08', f: [338, 140] }, { k: '009', f: [640, 700] }];
+const c = card(null, 510, 1004, 860, 645, { chip: false, img: PRODUCTS.G63.img });
+const rnd = el('div', 'rnd', '1/4', c.w), cd = el('div', 'cd', '3', c.w), q = el('div', 'q', 'Что это? 🤔', c.w);
+const chip = el('div', 'k-chip', '', c.w); chip.style.fontSize = '34px';
+const T0 = 0.8, RD = 2.7, CT = T0 + 4 * RD;
+const st = cta('Сколько угадаешь из 4?<br>Пиши счёт 👇', 1004);
+window.seek = t => {
+  bs(t); hd(t);
+  const ci = eBack(seg(t, 0.3, 0.8), 1.3); c.style.transform = `translateY(${(1 - ci) * 900}px)`;
+  const r = clamp(Math.floor((t - T0) / RD), 0, 3), u = t < T0 ? 0 : Math.min(t, CT) - T0 - r * RD, it = R[r];
+  if (!c.img.src.endsWith(PRODUCTS[it.k].img)) c.img.src = PRODUCTS[it.k].img;
+  const out = t < T0 ? 0 : (u >= RD - 0.01 && t >= CT ? 1 : eOut(seg(u, 1.8, 2.3)) * (1 - 0) );
+  const z = lerp(4.2 - 0.4 * clamp(u / 1.8), 1, t >= CT ? 1 : eOut(seg(u, 1.8, 2.3)));
+  c.img.style.transformOrigin = `${it.f[0] / 12}% ${it.f[1] / 9}%`; c.img.style.transform = `scale(${z})`;
+  rnd.textContent = (r + 1) + '/4';
+  const n = 3 - Math.floor(clamp(u / 0.6, 0, 2.99)); cd.textContent = n;
+  const cdOn = u < 1.8 && t >= T0 && t < CT; cd.style.transform = `scale(${cdOn ? 1 + 0.25 * Math.exp(-((u % 0.6) * 9)) : 0})`;
+  const rev = (t >= CT) ? 1 : eOut(seg(u, 1.9, 2.15)); chip.textContent = PRODUCTS[it.k].label; chip.style.opacity = rev;
+  q.style.opacity = 1 - rev;
+  popSticker(st, t, CT + 0.15, 99, -3);
+};
+window.DUR = 13.2; window.seek(0);
+</script></body></html>

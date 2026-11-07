@@ -1,3 +1,4 @@
 fr_*/
 *.txt
+*.log
 __pycache__/

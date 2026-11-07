@@ -1,0 +1,34 @@
+<!doctype html><html lang="ru"><head><meta charset="utf-8"><link rel="stylesheet" href="fonts.css"><link rel="stylesheet" href="common.css"><link rel="stylesheet" href="kit.css"><style>
+#big { position: absolute; left: 510px; top: 1070px; }
+#bn { position: absolute; left: 510px; top: 700px; width: 120px; height: 120px; margin: -60px 0 0 -60px; border-radius: 50%; background: #FFD23F; color: #0d2160; font: 900 70px/112px 'Unb'; text-align: center; border: 5px solid #fff; z-index: 6; }
+#qq { position: absolute; left: 510px; top: 700px; transform: translate(-50%,-50%); padding: 14px 34px; border-radius: 30px; background: #fff; color: #0d2160; font: 900 46px 'Unb'; white-space: nowrap; opacity: 0; z-index: 6; }
+.ok { position: absolute; right: -14px; top: -18px; width: 80px; height: 80px; border-radius: 50%; background: #22c55e; color: #fff; font: 900 50px/80px 'Unb'; text-align: center; z-index: 4; }
+.cdq { position: absolute; left: 510px; top: 1470px; transform: translate(-50%,-50%); padding: 8px 28px; border-radius: 26px; background: #ff3b3b; font: 900 40px 'Unb'; opacity: 0; }
+</style></head><body class="th-teal"><script src="lib.js"></script><script src="products.js"></script><script src="kit.js"></script><script>
+const bs = base(161), hd = header({ l1: 'ЗАПОМНИ', l2: 'ПОРЯДОК 🧠', s2: 104, sub: '4 машины — потом вопрос' });
+const SEQ = ['L6', '5688', 'FT908', '009'], OPT = ['5688', '009', 'FT908', 'L6'], RIGHT = 2;
+const big = card('L6', 510, 1070, 820, 615); const bn = el('div', null, '1'); bn.id = 'bn';
+const OP = [[318, 920], [702, 920], [318, 1250], [702, 1250]];
+const opts = OPT.map((k, i) => { const c = card(k, OP[i][0], OP[i][1], 372, 279, { num: 'ABCD'[i] }); c.ok = el('div', 'ok', '✓', c); return c; });
+const qq = el('div', null, 'Какая была третьей? 🤔'); qq.id = 'qq'; const cdq = el('div', 'cdq', ''); 
+const T0 = 0.9, S = 0.85, QT = T0 + 4 * S + 0.1, RV = QT + 3.1, CT = RV + 0.9;
+const st = cta('Получилось?<br>Пиши + или − 👇', 1085);
+window.seek = t => {
+  bs(t); hd(t);
+  const i = clamp(Math.floor((t - T0) / S), 0, 3), u = t - T0 - i * S;
+  if (!big.img.src.endsWith(PRODUCTS[SEQ[i]].img)) { big.img.src = PRODUCTS[SEQ[i]].img; big.chip.textContent = PRODUCTS[SEQ[i]].label; }
+  const vis = t < QT, pin = t < T0 ? eBack(seg(t, 0.3, 0.8), 1.3) : 1;
+  big.style.opacity = vis ? 1 : 0; big.style.transform = `translateY(${(1 - pin) * 900}px) scale(${t >= T0 ? 1 + 0.05 * Math.exp(-u * 10) : 1})`;
+  bn.textContent = i + 1; bn.style.opacity = t >= T0 && vis ? 1 : 0; bn.style.transform = `scale(${1 + 0.3 * Math.exp(-u * 10)})`;
+  qq.style.opacity = t >= QT ? 1 : 0; qq.style.transform = `translate(-50%,-50%) scale(${eBack(seg(t, QT, QT + 0.3), 2)})`;
+  const left = 3 - Math.floor(clamp((t - QT - 0.1) / 1, 0, 2.99));
+  cdq.textContent = '⏱ ' + left; cdq.style.opacity = t > QT && t < RV ? 1 : 0;
+  opts.forEach((c, k) => { const p = eBack(seg(t, QT + 0.05 * k, QT + 0.35 + 0.05 * k), 1.8);
+    const good = k === RIGHT, rv = eOut(seg(t, RV, RV + 0.25));
+    c.style.opacity = t >= QT ? 1 : 0; c.style.transform = `scale(${p * (good ? 1 + 0.07 * rv : 1)})`; c.style.zIndex = good ? 5 : 1;
+    c.style.background = good && rv > 0 ? '#22c55e' : '#fff'; c.style.filter = `brightness(${good ? 1 : 1 - 0.5 * rv})`;
+    c.ok.style.transform = `scale(${good ? eBack(seg(t, RV + 0.1, RV + 0.4), 2.5) : 0})`; });
+  popSticker(st, t, CT, 99, -3);
+};
+window.DUR = 10.6; window.seek(0);
+</script></body></html>

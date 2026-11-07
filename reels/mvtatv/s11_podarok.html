@@ -1,0 +1,41 @@
+<!doctype html><html lang="ru"><head><meta charset="utf-8"><link rel="stylesheet" href="fonts.css"><link rel="stylesheet" href="common.css"><link rel="stylesheet" href="kit.css"><style>
+.cell { position: absolute; width: 360px; height: 270px; }
+.ph { position: absolute; inset: 0; background: #fff; border-radius: 26px; padding: 8px; box-shadow: 0 16px 40px rgba(0,0,0,.45); }
+.ph img { width: 100%; height: 100%; object-fit: cover; border-radius: 19px; display: block; }
+.box { position: absolute; left: 40px; top: 50px; width: 280px; height: 210px; border-radius: 16px; box-shadow: 0 16px 40px rgba(0,0,0,.45); }
+.box::before { content: ''; position: absolute; left: 50%; top: 0; width: 44px; height: 100%; margin-left: -22px; background: #FFD23F; }
+.lid { position: absolute; left: 24px; top: 10px; width: 312px; height: 62px; border-radius: 14px; box-shadow: 0 8px 18px rgba(0,0,0,.35); }
+.lid::before { content: ''; position: absolute; left: 50%; top: 0; width: 46px; height: 100%; margin-left: -23px; background: #FFD23F; }
+.bow { position: absolute; left: 50%; top: -46px; width: 120px; height: 60px; margin-left: -60px; }
+.bow i { position: absolute; top: 0; width: 60px; height: 52px; border: 14px solid #FFD23F; border-radius: 50% 50% 50% 50%; }
+.bow i:first-child { left: 0; transform: rotate(-20deg); } .bow i:last-child { right: 0; transform: rotate(20deg); }
+.bn { position: absolute; left: 50%; top: 58%; width: 92px; height: 92px; margin: -46px 0 0 -46px; border-radius: 50%; background: #fff; color: #0d2160; font: 900 54px/92px 'Unb'; text-align: center; z-index: 2; }
+#cd { position: absolute; left: 510px; top: 1520px; transform: translate(-50%,-50%); padding: 12px 34px; border-radius: 30px; background: #fff; color: #0d2160; font: 900 44px 'Unb'; white-space: nowrap; opacity: 0; }
+</style></head><body class="th-red"><script src="lib.js"></script><script src="products.js"></script><script src="kit.js"></script><script>
+const bs = base(111), hd = header({ l1: 'ВЫБЕРИ', l2: 'ПОДАРОК 🎁', s2: 104, sub: 'запомни номер коробки — и смотри!' });
+const K = ['6666', 'FT908', '800', 'T08', '009', 'G63'], COL = ['#1b8f5a', '#2153c7', '#7a2fc7', '#e0602b', '#0f8aa0', '#c2185b'];
+const CX = [318, 702], CY = [796, 1084, 1372];
+const cells = K.map((k, i) => { const d = el('div', 'cell'); d.style.left = CX[i % 2] - 180 + 'px'; d.style.top = CY[Math.floor(i / 2)] - 135 + 'px';
+  d.ph = el('div', 'ph', `<img src="${PRODUCTS[k].img}"><div class="k-chip">${PRODUCTS[k].label}</div>`, d);
+  d.box = el('div', 'box', `<div class="bn">${i + 1}</div>`, d); d.box.style.background = COL[i];
+  d.lid = el('div', 'lid', '<div class="bow"><i></i><i></i></div>', d); d.lid.style.background = COL[i]; return d; });
+const cd = el('div', null, ''); cd.id = 'cd';
+const O0 = 3.6, OS = 0.8, CT = O0 + 6 * OS + 0.2;
+const st = cta('Какой подарок твой?<br>Пиши номер коробки 👇', 1084);
+window.seek = t => {
+  bs(t); hd(t);
+  cd.style.opacity = t > 1.3 && t < O0 ? 1 : 0;
+  cd.textContent = t < 1.9 ? 'Запомни номер!' : ['3', '2', '1'][clamp(Math.floor((t - 1.9) / 0.55), 0, 2)];
+  cd.style.transform = `translate(-50%,-50%) scale(${t < 1.9 ? 1 : 1 + 0.25 * Math.exp(-((t - 1.9) % 0.55) * 9)})`;
+  cells.forEach((c, i) => {
+    const p = eBack(seg(t, 0.4 + 0.1 * i, 0.75 + 0.1 * i), 1.8), o = seg(t, O0 + OS * i, O0 + OS * i + 0.5);
+    const shake = t > O0 + OS * i - 0.3 && o === 0 ? Math.sin(t * 60) * 4 : 0;
+    c.style.transform = `scale(${p}) rotate(${shake}deg)`;
+    c.lid.style.transform = `translateY(${-260 * eOut(o)}px) rotate(${(i % 2 ? 30 : -30) * eOut(o)}deg)`; c.lid.style.opacity = 1 - seg(o, 0.5, 1);
+    c.box.style.opacity = 1 - seg(o, 0.15, 0.45); c.box.style.transform = `translateY(${40 * eIn(seg(o, 0.1, 0.5))}px)`;
+    const ph = eBack(seg(o, 0.2, 0.7), 2); c.ph.style.opacity = o > 0.15 ? 1 : 0; c.ph.style.transform = `scale(${0.5 + 0.5 * ph})`;
+    c.style.filter = `brightness(${t >= CT ? 1 - 0.45 * eOut(seg(t, CT, CT + 0.3)) : 1})`; });
+  popSticker(st, t, CT + 0.1, 99, -3);
+};
+window.DUR = 11; window.seek(0);
+</script></body></html>

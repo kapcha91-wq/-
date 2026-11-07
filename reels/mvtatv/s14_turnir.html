@@ -1,0 +1,27 @@
+<!doctype html><html lang="ru"><head><meta charset="utf-8"><link rel="stylesheet" href="fonts.css"><link rel="stylesheet" href="common.css"><link rel="stylesheet" href="kit.css"><style>
+.vsb { position: absolute; width: 96px; height: 96px; margin: -48px 0 0 -48px; border-radius: 50%; background: #FFD23F; color: #0d2160; font: 900 26px/1 'Unb';
+  display: flex; flex-direction: column; align-items: center; justify-content: center; border: 5px solid #fff; z-index: 6; box-shadow: 0 8px 20px rgba(0,0,0,.4); }
+.vsb b { font-size: 36px; }
+</style></head><body><script src="lib.js"></script><script src="products.js"></script><script src="kit.js"></script><script>
+const bs = base(141), hd = header({ l1: 'ТУРНИР 🏆', l2: '1/4 ФИНАЛА', s2: 92, sub: 'голосуй за победителя каждой пары' });
+const M = [['G63', '6666'], ['5688', '9166'], ['FT908', 'BUGGY'], ['009', '800']], RY = [748, 966, 1184, 1402];
+const rows = M.map((m, i) => ({ a: card(m[0], 300, RY[i], 280, 210), b: card(m[1], 720, RY[i], 280, 210),
+  v: (() => { const v = el('div', 'vsb', `<b>${i + 1}</b>VS`); v.style.left = '510px'; v.style.top = RY[i] + 'px'; return v; })() }));
+const H0 = 3.0, HS = 0.32, CT = 8.0;
+const st = cta('Кто проходит дальше? 👇<br><span style="font-size:36px">пиши: 1 — G63, 2 — …</span>', 1075);
+const stF = cta('Финал — в следующем рилсе 🏆', 1500, { fontSize: '36px', background: '#fff' });
+window.seek = t => {
+  bs(t); hd(t);
+  const h = t >= H0 && t < CT ? Math.floor((t - H0) / HS) : -1;
+  rows.forEach((r, i) => {
+    const p = eOut(seg(t, 0.5 + 0.35 * i, 0.9 + 0.35 * i));
+    r.a.style.transform = `translateX(${(1 - p) * -700}px) rotate(-2deg)`; r.b.style.transform = `translateX(${(1 - p) * 700}px) rotate(2deg)`;
+    r.v.style.transform = `scale(${eBack(seg(t, 0.8 + 0.35 * i, 1.1 + 0.35 * i), 2.5)})`;
+    const on = h >= 0 && h % 4 === i, side = Math.floor(h / 4) % 2;
+    [r.a, r.b].forEach((c, s) => { const hl = on && s === side; c.style.background = hl ? '#FFD23F' : '#fff';
+      c.style.boxShadow = hl ? '0 0 40px rgba(255,210,63,.9)' : '0 20px 50px rgba(0,0,0,.45)';
+      c.style.filter = `brightness(${t >= CT ? 1 - 0.45 * eOut(seg(t, CT, CT + 0.3)) : 1})`; }); });
+  popSticker(st, t, CT + 0.1, 99, -3); popSticker(stF, t, CT + 0.5, 99, 2);
+};
+window.DUR = 10.4; window.seek(0);
+</script></body></html>

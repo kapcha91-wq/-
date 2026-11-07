@@ -1,0 +1,33 @@
+<!doctype html><html lang="ru"><head><meta charset="utf-8"><link rel="stylesheet" href="fonts.css"><link rel="stylesheet" href="common.css"><link rel="stylesheet" href="kit.css"><style>
+.fl { position: absolute; width: 360px; height: 270px; perspective: 1400px; }
+.fl .in { position: absolute; inset: 0; transform-style: preserve-3d; }
+.fl .f, .fl .b { position: absolute; inset: 0; backface-visibility: hidden; border-radius: 26px; }
+.fl .b { background: #FFD23F; color: #0d2160; display: flex; flex-direction: column; align-items: center; justify-content: center; font: 900 40px/1.15 'Unb', 'Noto Color Emoji'; text-align: center;
+  box-shadow: 0 16px 40px rgba(0,0,0,.45); border: 8px solid #fff; }
+.fl .b span { font-size: 54px; margin-bottom: 6px; }
+.fl .f { transform: rotateY(180deg); background: #fff; padding: 8px; box-shadow: 0 16px 40px rgba(0,0,0,.45); }
+.fl .f img { width: 100%; height: 100%; object-fit: cover; border-radius: 19px; display: block; }
+.fl .m { position: absolute; left: 16px; top: 16px; padding: 6px 14px; border-radius: 14px; background: #FFD23F; color: #0d2160; font: 900 24px 'Unb'; }
+</style></head><body class="th-purple"><script src="lib.js"></script><script src="products.js"></script><script src="kit.js"></script><script>
+const bs = base(81), hd = header({ l1: 'МЕСЯЦ РОЖДЕНИЯ', s1: 68, l2: 'РЕБЁНКА 🎂', s2: 100, sub: 'найди свой месяц — что выпало?' });
+const M = [['ЯНВАРЬ', 'ФЕВРАЛЬ', '❄️', 'G63'], ['МАРТ', 'АПРЕЛЬ', '🌷', 'FT908'], ['МАЙ', 'ИЮНЬ', '☀️', '009'],
+           ['ИЮЛЬ', 'АВГУСТ', '🏖️', 'BUGGY'], ['СЕНТЯБРЬ', 'ОКТЯБРЬ', '🍂', '5688'], ['НОЯБРЬ', 'ДЕКАБРЬ', '🎄', '6666']];
+const CX = [318, 702], CY = [796, 1084, 1372];
+const cells = M.map((m, i) => { const d = el('div', 'fl'); d.style.left = CX[i % 2] - 180 + 'px'; d.style.top = CY[Math.floor(i / 2)] - 135 + 'px';
+  d.innerHTML = `<div class="in"><div class="b"><span>${m[2]}</span>${m[0]}<br>${m[1]}</div><div class="f"><img src="${PRODUCTS[m[3]].img}"><div class="m">${m[0].slice(0, 3).toLowerCase()}–${m[1].slice(0, 3).toLowerCase()}</div><div class="k-chip">${PRODUCTS[m[3]].label}</div></div></div>`;
+  d.inner = d.firstChild; return d; });
+const F0 = 1.6, FS = 0.55, H0 = 5.3, HS = 0.4, CT = 8.0;
+const st = cta('Какой месяц у вашего?<br>Пиши, что выпало 👇', 1084);
+window.seek = t => {
+  bs(t); hd(t);
+  const hop = t >= H0 && t < H0 + 6 * HS ? Math.floor((t - H0) / HS) : -1;
+  cells.forEach((c, i) => {
+    const p = eBack(seg(t, 0.4 + 0.1 * i, 0.75 + 0.1 * i), 1.8), f = seg(t, F0 + FS * i, F0 + FS * i + 0.45);
+    const ang = 180 * (f < 1 ? (1 - Math.cos(Math.PI * f)) / 2 : 1);
+    const on = i === hop, k = on ? 1.07 : 1, dm = t >= CT ? 1 - 0.5 * eOut(seg(t, CT, CT + 0.3)) : (hop >= 0 && !on ? 0.6 : 1);
+    c.style.transform = `scale(${p * k})`; c.style.zIndex = on ? 5 : 1; c.style.filter = `brightness(${dm})`;
+    c.inner.style.transform = `rotateY(${ang}deg) scale(${1 + 0.12 * Math.sin(Math.PI * f)})`; });
+  popSticker(st, t, CT + 0.1, 99, -3);
+};
+window.DUR = 10.2; window.seek(0);
+</script></body></html>

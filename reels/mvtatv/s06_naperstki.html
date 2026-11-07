@@ -1,0 +1,42 @@
+<!doctype html><html lang="ru"><head><meta charset="utf-8"><link rel="stylesheet" href="fonts.css"><link rel="stylesheet" href="common.css"><link rel="stylesheet" href="kit.css"><style>
+.gar { position: absolute; width: 250px; height: 270px; margin: -135px 0 0 -125px; z-index: 5; }
+.gar .roof { position: absolute; left: -16px; top: -14px; width: 282px; height: 40px; border-radius: 14px; background: #FFD23F; box-shadow: 0 6px 14px rgba(0,0,0,.35); z-index: 3; }
+.gar .body { position: absolute; inset: 14px 0 0 0; border-radius: 0 0 18px 18px; background: #1b2747; border: 8px solid #e8ecf5; overflow: hidden; }
+.gar .door { position: absolute; left: 0; top: 0; width: 100%; background: repeating-linear-gradient(#cfd6e6 0 18px, #9aa6c2 18px 22px); }
+.gar img { position: absolute; left: 6%; bottom: 8px; width: 88%; border-radius: 10px; }
+.slotn { position: absolute; width: 90px; height: 90px; margin-left: -45px; border-radius: 50%; background: #fff; color: #0d2160; font: 900 50px/90px 'Unb'; text-align: center; box-shadow: 0 8px 20px rgba(0,0,0,.35); }
+</style></head><body class="th-teal"><script src="lib.js"></script><script src="products.js"></script><script src="kit.js"></script><script>
+const bs = base(51), hd = header({ l1: 'НАПЁРСТКИ', s1: 92, l2: 'ГДЕ G63?', s2: 120, sub: 'следи внимательно 👀' });
+const SX = [220, 510, 800], GY = 1130;
+const hero = card('G63', 510, 760, 330, 248, { chip: false });
+const gs = [0, 1, 2].map(i => { const g = el('div', 'gar'); el('div', 'roof', null, g); const b = el('div', 'body', null, g);
+  if (i === 1) { g.car = el('img', null, null, b); g.car.src = PRODUCTS.G63.img; } g.door = el('div', 'door', null, b); g.pos = i; return g; });
+[0, 1, 2].forEach(i => { const n = el('div', 'slotn', String(i + 1)); n.style.left = SX[i] + 'px'; n.style.top = '1300px'; });
+// swaps get faster; the car is in garage index 1
+const R = rng(9), SW = []; let t0 = 2.7, d = 0.62;
+while (t0 + d < 8.6) { const a = Math.floor(R() * 3); let b = Math.floor(R() * 2); if (b >= a) b++; SW.push({ a, b, t0, t1: t0 + d }); t0 += d + 0.04; d = Math.max(0.3, d * 0.9); }
+// final slot of every garage
+const fin = [0, 1, 2]; SW.forEach(s => { const ia = fin.indexOf(s.a), ib = fin.indexOf(s.b); fin[ia] = s.b; fin[ib] = s.a; });
+window.ANSWER = fin[1] + 1;
+const st = cta('Где G63? 1, 2 или 3? 👇<br><span style="font-size:38px">ответ — в закрепе 📌</span>', 780);
+window.seek = t => {
+  bs(t); hd(t);
+  const hi = eBack(seg(t, 0.4, 0.8), 1.8), drop = eIn(seg(t, 1.5, 1.95));
+  hero.style.opacity = t < 1.95 ? 1 : 0;
+  hero.style.transform = `translateY(${drop * 380}px) scale(${hi * (1 - 0.35 * drop)})`;
+  const door = eOut(seg(t, 2.0, 2.4));
+  const pos = [0, 1, 2], off = [0, 0, 0];
+  for (const s of SW) {
+    if (t >= s.t1) { const ia = pos.indexOf(s.a), ib = pos.indexOf(s.b); pos[ia] = s.b; pos[ib] = s.a; }
+    else if (t > s.t0) { const u = eOut((t - s.t0) / (s.t1 - s.t0)) * 0 + (1 - Math.cos(Math.PI * (t - s.t0) / (s.t1 - s.t0))) / 2;
+      const ga = pos.indexOf(s.a), gb = pos.indexOf(s.b);
+      gs[ga].mx = lerp(SX[s.a], SX[s.b], u); gs[ga].my = -Math.sin(Math.PI * u) * 90;
+      gs[gb].mx = lerp(SX[s.b], SX[s.a], u); gs[gb].my = Math.sin(Math.PI * u) * 70; break; } }
+  gs.forEach((g, i) => { const inSwap = g.mx != null; const x = inSwap ? g.mx : SX[pos[i]], y = GY + (inSwap ? g.my : 0);
+    const p = eBack(seg(t, 0.6 + 0.15 * i, 0.95 + 0.15 * i), 2);
+    g.style.left = x + 'px'; g.style.top = y + 'px'; g.style.transform = `scale(${p})`; g.style.zIndex = inSwap && g.my < 0 ? 7 : 5;
+    g.door.style.height = (door * 100) + '%'; g.mx = null; });
+  popSticker(st, t, 8.8, 99, -3);
+};
+window.DUR = 11; window.seek(0);
+</script></body></html>

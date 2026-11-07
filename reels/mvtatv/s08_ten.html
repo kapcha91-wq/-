@@ -1,0 +1,32 @@
+<!doctype html><html lang="ru"><head><meta charset="utf-8"><link rel="stylesheet" href="fonts.css"><link rel="stylesheet" href="common.css"><link rel="stylesheet" href="kit.css"><style>
+#rays { position: absolute; left: 510px; top: 1010px; width: 1600px; height: 1600px; margin: -800px 0 0 -800px; border-radius: 50%;
+  background: repeating-conic-gradient(rgba(255,255,255,.28) 0 9deg, transparent 9deg 18deg); -webkit-mask: radial-gradient(circle, #000 25%, transparent 62%); }
+#stage { position: absolute; left: 100px; top: 700px; width: 820px; height: 620px; }
+#stage img { position: absolute; left: 50%; top: 50%; max-width: 100%; max-height: 100%; transform: translate(-50%,-50%); }
+.cd2 { position: absolute; left: 510px; top: 1420px; transform: translate(-50%,-50%); padding: 10px 34px; border-radius: 30px; background: #0d2160; color: #FFD23F; font: 900 54px 'Unb'; white-space: nowrap; }
+#flash { position: absolute; inset: 0; background: #fff; opacity: 0; z-index: 20; }
+</style></head><body class="th-yellow"><script src="lib.js"></script><script src="products.js"></script><script src="kit.js"></script><script>
+const bs = base(71, { flakes: 0, badgeDark: true }), hd = header({ l1: 'УГАДАЙ', l2: 'ПО ТЕНИ', dark: true, sub: 'кто это? 4 раунда 👀' });
+el('div', null, null).id = 'rays';
+const stage = el('div', null, null); stage.id = 'stage';
+const K = ['800', 'T08', 'FT908', '5688'], imgs = K.map(k => { const i = el('img', null, null, stage); i.src = 'src/cut/' + k + '.png'; return i; });
+const cd = el('div', 'cd2', '3'), fl = el('div', null, null); fl.id = 'flash';
+const T0 = 0.8, RD = 2.7, CT = T0 + 4 * RD;
+const st = cta('Какой счёт: 1, 2, 3 или 4?<br>Пиши 👇', 1010, { background: '#0d2160', color: '#fff' });
+window.seek = t => {
+  bs(t); hd(t);
+  $('rays').style.transform = `rotate(${t * 14}deg)`;
+  const r = clamp(Math.floor((t - T0) / RD), 0, 3), u = t < T0 ? -1 : Math.min(t, CT - 0.001) - T0 - r * RD;
+  const rev = t >= CT ? 1 : eOut(seg(u, 1.8, 2.05));
+  imgs.forEach((im, i) => { const on = i === r && t >= T0 - 0.3; const pin = eBack(seg(u, 0, 0.3), 1.8);
+    im.style.opacity = on ? 1 : 0;
+    im.style.filter = `brightness(${rev}) drop-shadow(0 18px 22px rgba(0,0,0,${0.15 + 0.25 * rev}))`;
+    im.style.transform = `translate(-50%,-50%) scale(${(t < T0 ? eBack(seg(t, 0.4, 0.8), 1.8) : pin) * (1 + 0.04 * rev)})`; });
+  const n = 3 - Math.floor(clamp(u / 0.6, 0, 2.99));
+  cd.innerHTML = u < 1.8 ? n : PRODUCTS[K[r]].label; cd.style.background = u < 1.8 ? '#0d2160' : '#fff'; cd.style.color = u < 1.8 ? '#FFD23F' : '#0d2160';
+  cd.style.opacity = t >= T0 && t < CT ? 1 : 0; cd.style.transform = `translate(-50%,-50%) scale(${u < 1.8 ? 1 + 0.2 * Math.exp(-((u % 0.6) * 9)) : 1})`;
+  fl.style.opacity = t < CT ? 0.85 * Math.exp(-Math.max(0, u - 1.8) * 14) * (u >= 1.8 ? 1 : 0) : 0;
+  popSticker(st, t, CT + 0.15, 99, -3);
+};
+window.DUR = 13.2; window.seek(0);
+</script></body></html>

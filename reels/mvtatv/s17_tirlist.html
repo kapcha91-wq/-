@@ -1,0 +1,28 @@
+<!doctype html><html lang="ru"><head><meta charset="utf-8"><link rel="stylesheet" href="fonts.css"><link rel="stylesheet" href="common.css"><link rel="stylesheet" href="kit.css"><style>
+.row { position: absolute; left: 90px; width: 840px; height: 150px; border-radius: 22px; background: rgba(255,255,255,.12); }
+.row .lb { position: absolute; left: 0; top: 0; width: 150px; height: 150px; border-radius: 22px 0 0 22px; font: 900 76px/150px 'Unb'; text-align: center; color: #0d2160; }
+.th { position: absolute; width: 180px; height: 136px; border-radius: 14px; overflow: hidden; border: 5px solid #fff; box-shadow: 0 8px 18px rgba(0,0,0,.35); }
+.th img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.th span { position: absolute; right: 6px; bottom: 6px; padding: 3px 9px; border-radius: 10px; background: rgba(8,19,51,.85); font: 800 18px 'Unb'; }
+#qm { position: absolute; left: 50%; top: 50%; transform: translate(-50%,-50%); font: 900 150px 'Unb'; color: #FFD23F; text-shadow: 0 10px 0 #b8441a; z-index: 3; }
+</style></head><body><script src="lib.js"></script><script src="products.js"></script><script src="kit.js"></script><script>
+const bs = base(171), hd = header({ l1: 'НАШ', l2: 'ТИР-ЛИСТ', s2: 120, sub: 'а ты куда поставишь последнюю?' });
+const TIERS = [['S', '#ff6b6b'], ['A', '#ffa94d'], ['B', '#FFD23F'], ['C', '#8ce99a']], RY = [636, 800, 964, 1128];
+TIERS.forEach((tr, i) => { const r = el('div', 'row'); r.style.top = RY[i] + 'px'; const l = el('div', 'lb', tr[0], r); l.style.background = tr[1]; });
+const ITEMS = [['G63', 0], ['009', 0], ['FT908', 1], ['6666', 1], ['5688', 2], ['9166', 2], ['T08', 3], ['800', 3]];
+const cnt = [0, 0, 0, 0];
+const ths = ITEMS.map(([k, r]) => { const d = el('div', 'th', `<img src="${PRODUCTS[k].img}"><span>${PRODUCTS[k].label}</span>`);
+  d.tx = 90 + 166 + cnt[r]++ * 196; d.ty = RY[r] + 7; d.style.left = d.tx + 'px'; d.style.top = d.ty + 'px'; return d; });
+const last = card('L6', 510, 1400, 300, 225); el('div', null, '?', last.w).id = 'qm';
+const T0 = 1.0, S = 0.6, LT = T0 + ITEMS.length * S + 0.2, CT = LT + 1.2;
+const st = cta('Куда поставишь L6?<br>S, A, B или C 👇', 960);
+window.seek = t => {
+  bs(t); hd(t);
+  ths.forEach((d, i) => { const a = T0 + i * S, u = eOut(seg(t, a, a + 0.35));
+    d.style.opacity = t >= a ? 1 : 0; d.style.transform = `translateY(${(1 - u) * -500}px) rotate(${(1 - u) * (i % 2 ? 25 : -25)}deg) scale(${1 + 0.15 * Math.sin(Math.PI * u)})`; });
+  const l = eBack(seg(t, LT, LT + 0.45), 1.6);
+  last.style.opacity = t >= LT ? 1 : 0; last.style.transform = `translateY(${(1 - l) * 500 + Math.sin(t * 4) * 10}px) rotate(${Math.sin(t * 3) * 3}deg)`; last.style.zIndex = 8;
+  popSticker(st, t, CT, 99, -3);
+};
+window.DUR = 9.8; window.seek(0);
+</script></body></html>

@@ -1,0 +1,23 @@
+<!doctype html><html lang="ru"><head><meta charset="utf-8"><link rel="stylesheet" href="fonts.css"><link rel="stylesheet" href="common.css"><link rel="stylesheet" href="kit.css"><style>
+.vote { position: absolute; top: 1338px; transform: translate(-50%,-50%); width: 250px; padding: 14px 0; border-radius: 30px; background: #fff; color: #0d2160; text-align: center;
+  font: 900 36px 'Unb', 'Noto Color Emoji'; box-shadow: 0 8px 20px rgba(0,0,0,.35); white-space: nowrap; }
+</style></head><body class="th-green"><script src="lib.js"></script><script src="products.js"></script><script src="kit.js"></script><script>
+const bs = base(201), hd = header({ l1: 'СЫНУ', l2: 'ИЛИ ДОЧКЕ?', s2: 92, sub: 'или обоим? голосуй в комментариях' });
+const K = ['800', 'T08', '5688', '009', '6666', 'FT908'];
+const c = card('800', 510, 958, 760, 570);
+const V = [['👦 сыну', 245], ['👧 дочке', 510], ['👫 обоим', 775]].map(([s, x]) => { const v = el('div', 'vote', s); v.style.left = x + 'px'; return v; });
+const T0 = 0.9, S = 1.3, CT = T0 + K.length * S + 0.1;
+const st = cta('Розовый багги —<br>только для девочек?<br><span style="font-size:38px">спорим в комментариях 👇</span>', 958, { fontSize: '48px' });
+window.seek = t => {
+  bs(t); hd(t);
+  const i = clamp(Math.floor((t - T0) / S), 0, K.length - 1), u = t < T0 ? 0.5 : Math.min(t, CT - 0.001) - T0 - i * S;
+  if (!c.img.src.endsWith(PRODUCTS[K[i]].img)) { c.img.src = PRODUCTS[K[i]].img; c.chip.textContent = PRODUCTS[K[i]].label; }
+  const pin = t < T0 ? eBack(seg(t, 0.3, 0.8), 1.3) : 1, inn = t < T0 ? 1 : eBack(clamp(u / 0.3), 1.6);
+  c.style.transform = `translateY(${(1 - pin) * 900}px) scale(${0.85 + 0.15 * inn}) rotate(${(1 - inn) * (i % 2 ? 6 : -6) - 1}deg)`;
+  const hop = Math.floor(u / 0.3) % 3;
+  V.forEach((v, k) => { const p = eBack(seg(t, 0.8 + 0.12 * k, 1.1 + 0.12 * k), 2), on = t >= T0 && t < CT && k === hop;
+    v.style.transform = `translate(-50%,-50%) scale(${p * (on ? 1.1 : 1)})`; v.style.background = on ? '#FFD23F' : '#fff'; });
+  popSticker(st, t, CT, 99, -3);
+};
+window.DUR = 10.8; window.seek(0);
+</script></body></html>
