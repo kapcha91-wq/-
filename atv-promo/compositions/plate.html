@@ -1,0 +1,52 @@
+<template>
+  <style>
+    #root {
+      position: absolute;
+      inset: 0;
+      overflow: hidden;
+      background: #08080a;
+    }
+    #plate-cam {
+      position: absolute;
+      left: 0;
+      top: 0;
+      width: 1080px;
+      height: 1920px;
+      transform-origin: 0 0;
+    }
+    #plate-img {
+      position: absolute;
+      left: 0;
+      top: 0;
+      width: 1080px;
+      height: 1920px;
+      object-fit: cover;
+    }
+  </style>
+  <div id="root" data-composition-id="plate" data-width="1080" data-height="1920" data-motion-blur="on">
+    <div id="plate-shot" class="clip" data-start="0" data-duration="13" data-track-index="0">
+      <div id="plate-cam" data-layout-allow-overflow>
+        <img id="plate-img" src="assets/atv.png" alt="Квадроцикл Raptor ATV 4x4 700" />
+      </div>
+    </div>
+  </div>
+  <script>
+    // Camera: transform-origin 0 0, so x/y are the image's top-left offset at the given scale.
+    const tl = gsap.timeline({ paused: true });
+    const cam = "#plate-cam";
+    // Shot 1, headlights: slow pull back while the hook lands.
+    tl.fromTo(cam, { scale: 2.4, x: -1512, y: -1238 }, { scale: 2.25, x: -1350, y: -1101, duration: 2.2, ease: "power1.out" }, 0);
+    // Whip down to the front wheel.
+    tl.to(cam, { scale: 2.0, x: -642, y: -1520, duration: 0.3, ease: "power3.inOut" }, 2.2);
+    // Shot 2, wheel: drift.
+    tl.to(cam, { scale: 1.9, x: -583, y: -1396, duration: 2.0, ease: "power1.out" }, 2.5);
+    // Hard cut to the winch at 4.6, then a sideways drift.
+    tl.set(cam, { scale: 2.2, x: -1296, y: -1768 }, 4.6);
+    tl.to(cam, { scale: 2.1, x: -1188, y: -1644, duration: 2.1, ease: "power1.out" }, 4.6);
+    // Pull back to the whole machine.
+    tl.to(cam, { scale: 1.06, x: -32, y: -58, duration: 0.9, ease: "power2.inOut" }, 6.8);
+    // Slow settle through the reveal and end card.
+    tl.to(cam, { scale: 1.0, x: 0, y: 0, duration: 5.3, ease: "power1.out" }, 7.7);
+    window.__timelines["plate"] = tl;
+  </script>
+</template>

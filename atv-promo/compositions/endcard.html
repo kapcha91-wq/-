@@ -1,0 +1,41 @@
+<template>
+  <style>
+    @font-face { font-family: "RaptorDisplay"; font-weight: 700; src: url("assets/fonts/oswald-cyr.woff2") format("woff2"); unicode-range: U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116; }
+    @font-face { font-family: "RaptorDisplay"; font-weight: 700; src: url("assets/fonts/oswald-lat.woff2") format("woff2"); unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD, U+00D7; }
+    @font-face { font-family: "RaptorText"; font-weight: 100 900; src: url("assets/fonts/inter-cyr.woff2") format("woff2"); unicode-range: U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116; }
+    @font-face { font-family: "RaptorText"; font-weight: 100 900; src: url("assets/fonts/inter-lat.woff2") format("woff2"); unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD, U+00D7;}
+    #root { position: absolute; inset: 0; overflow: hidden; font-family: "RaptorText", sans-serif; color: #f5f3ef; }
+    .scrim-b { position: absolute; left: 0; top: 900px; width: 1080px; height: 1020px; background: linear-gradient(to bottom, rgba(8,8,10,0) 0%, rgba(8,8,10,0.78) 45%, rgba(8,8,10,0.9) 100%); }
+    .scrim-t { position: absolute; left: 0; top: 0; width: 1080px; height: 760px; background: linear-gradient(to top, rgba(8,8,10,0) 0%, rgba(8,8,10,0.8) 70%); }
+    .feat { position: absolute; left: 120px; bottom: 690px; width: 660px; }
+    .idx { font-family: "RaptorDisplay", sans-serif; font-weight: 700; font-size: 44px; color: #ff6a13; letter-spacing: 0.08em; }
+    .label { font-family: "RaptorDisplay", sans-serif; font-weight: 700; font-size: 112px; line-height: 1.02; text-transform: uppercase; margin-top: 12px; }
+    .label span { display: inline-block; }
+    .bar { width: 140px; height: 10px; background: #ff6a13; margin-top: 28px; transform-origin: 0 50%; }
+    #end-scrim { position: absolute; left: 0; top: 0; width: 1080px; height: 1920px; background: linear-gradient(to bottom, rgba(8,8,10,1) 0%, rgba(8,8,10,0.96) 40%, rgba(8,8,10,0.7) 70%, rgba(8,8,10,0.8) 100%); }
+    #end-kicker { position: absolute; left: 120px; top: 430px; width: 660px; text-align: center; font-weight: 600; font-size: 32px; letter-spacing: 0.42em; color: rgba(245,243,239,0.8); }
+    #end-brand { position: absolute; left: 120px; top: 480px; width: 660px; text-align: center; font-family: "RaptorDisplay", sans-serif; font-weight: 700; font-size: 190px; line-height: 1; }
+    #end-brand { white-space: nowrap; }
+    #end-brand span { display: inline-block; }
+    #end-model { position: absolute; left: 150px; top: 800px; width: 600px; height: 110px; background: #e01e2b; text-align: center; font-family: "RaptorDisplay", sans-serif; font-weight: 700; font-size: 80px; line-height: 110px; letter-spacing: 0.04em; transform-origin: 50% 50%; }
+    #end-cta { position: absolute; left: 120px; top: 960px; width: 660px; height: 110px; border-radius: 55px; background: #ff6a13; color: #08080a; text-align: center; font-weight: 800; font-size: 46px; line-height: 110px; }
+  </style>
+  <div id="root" data-composition-id="endcard" data-width="1080" data-height="1920">
+    <div id="end-scrim" class="clip" data-start="0" data-duration="3.4" data-track-index="0"></div>
+    <div id="end-kicker" class="clip" data-start="0" data-duration="3.4" data-track-index="1">ASIAN RAPTOR</div>
+    <div id="end-brand" class="clip" data-start="0" data-duration="3.4" data-track-index="2"><span>R</span><span>A</span><span>P</span><span>T</span><span>O</span><span>R</span></div>
+    <div id="end-model" class="clip" data-start="0" data-duration="3.4" data-track-index="3">ATV 4×4 700</div>
+    <div id="end-cta" class="clip" data-start="0" data-duration="3.4" data-track-index="4">Узнай цену в директ</div>
+  </div>
+  <script>
+    const tl = gsap.timeline({ paused: true });
+    // The ground darkens behind the machine.
+    tl.fromTo("#end-scrim", { opacity: 0 }, { opacity: 0.92, duration: 0.4, ease: "power2.inOut" }, 0);
+    tl.fromTo("#end-kicker", { opacity: 0 }, { opacity: 1, duration: 0.3, ease: "power2.out" }, 0.25);
+    tl.fromTo("#end-brand span", { opacity: 0.3, filter: "blur(6px)", scale: 1.08 }, { opacity: 1, filter: "blur(0px)", scale: 1, duration: 0.25, ease: "power3.out", stagger: 0.08 }, 0.2);
+    // Model plate stamps in like the banner.
+    tl.fromTo("#end-model", { opacity: 0, scaleX: 0 }, { opacity: 1, scaleX: 1, duration: 0.45, ease: "expo.out" }, 0.75);
+    tl.fromTo("#end-cta", { opacity: 0, y: 30, filter: "blur(6px)" }, { opacity: 1, y: 0, filter: "blur(0px)", duration: 0.35, ease: "expo.out" }, 1.0);
+    window.__timelines["endcard"] = tl;
+  </script>
+</template>

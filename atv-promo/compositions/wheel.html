@@ -1,0 +1,39 @@
+<template>
+  <style>
+    @font-face { font-family: "RaptorDisplay"; font-weight: 700; src: url("assets/fonts/oswald-cyr.woff2") format("woff2"); unicode-range: U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116; }
+    @font-face { font-family: "RaptorDisplay"; font-weight: 700; src: url("assets/fonts/oswald-lat.woff2") format("woff2"); unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD, U+00D7; }
+    @font-face { font-family: "RaptorText"; font-weight: 100 900; src: url("assets/fonts/inter-cyr.woff2") format("woff2"); unicode-range: U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116; }
+    @font-face { font-family: "RaptorText"; font-weight: 100 900; src: url("assets/fonts/inter-lat.woff2") format("woff2"); unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD, U+00D7;}
+    #root { position: absolute; inset: 0; overflow: hidden; font-family: "RaptorText", sans-serif; color: #f5f3ef; }
+    .scrim-b { position: absolute; left: 0; top: 900px; width: 1080px; height: 1020px; background: linear-gradient(to bottom, rgba(8,8,10,0) 0%, rgba(8,8,10,0.78) 45%, rgba(8,8,10,0.9) 100%); }
+    .scrim-t { position: absolute; left: 0; top: 0; width: 1080px; height: 760px; background: linear-gradient(to top, rgba(8,8,10,0) 0%, rgba(8,8,10,0.8) 70%); }
+    .feat { position: absolute; left: 120px; bottom: 690px; width: 660px; }
+    .idx { font-family: "RaptorDisplay", sans-serif; font-weight: 700; font-size: 44px; color: #ff6a13; letter-spacing: 0.08em; }
+    .label { font-family: "RaptorDisplay", sans-serif; font-weight: 700; font-size: 112px; line-height: 1.02; text-transform: uppercase; margin-top: 12px; }
+    .label span { display: inline-block; }
+    .bar { width: 140px; height: 10px; background: #ff6a13; margin-top: 28px; transform-origin: 0 50%; }
+    #wheel-hero { position: absolute; left: 120px; top: 380px; width: 768px; text-align: center; font-family: "RaptorDisplay", sans-serif; font-weight: 700; font-size: 340px; line-height: 1; color: #ff6a13; }
+  </style>
+  <div id="root" data-composition-id="wheel" data-width="1080" data-height="1920">
+    <div id="wheel-scrim-t" class="scrim-t clip" data-start="0" data-duration="2.2" data-track-index="0"></div>
+    <div id="wheel-scrim-b" class="scrim-b clip" data-start="0" data-duration="2.2" data-track-index="0"></div>
+    <div id="wheel-hero" class="clip" data-start="0" data-duration="2.2" data-track-index="1">4×4</div>
+    <div id="wheel-feat" class="feat clip" data-start="0" data-duration="2.2" data-track-index="2">
+      <div id="wheel-idx" class="idx">02</div>
+      <div id="wheel-label" class="label"><span>Полный</span><br /><span>привод</span></div>
+      <div id="wheel-bar" class="bar"></div>
+    </div>
+  </div>
+  <script>
+    const tl = gsap.timeline({ paused: true });
+    // Hero lands blurred off the whip and sharpens.
+    tl.fromTo("#wheel-hero", { opacity: 0, y: -90, filter: "blur(18px)" }, { opacity: 1, y: 0, filter: "blur(0px)", duration: 0.35, ease: "expo.out" }, 0.05);
+    tl.fromTo("#wheel-idx", { opacity: 0 }, { opacity: 1, duration: 0.15, ease: "power2.out" }, 0.35);
+    // Words go from grey to ink.
+    tl.fromTo("#wheel-label span", { opacity: 0, color: "#6b6b70" }, { opacity: 1, color: "#f5f3ef", duration: 0.2, ease: "power2.out", stagger: 0.09 }, 0.4);
+    tl.fromTo("#wheel-bar", { scaleX: 0 }, { scaleX: 1, duration: 0.4, ease: "expo.out" }, 0.5);
+    // Exit just before the hard cut.
+    tl.to(["#wheel-hero", "#wheel-feat"], { opacity: 0, filter: "blur(8px)", duration: 0.15, ease: "power3.in" }, 2.0);
+    window.__timelines["wheel"] = tl;
+  </script>
+</template>

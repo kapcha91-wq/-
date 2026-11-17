@@ -1,0 +1,52 @@
+<template>
+  <style>
+    @font-face { font-family: "RaptorDisplay"; font-weight: 700; src: url("assets/fonts/oswald-cyr.woff2") format("woff2"); unicode-range: U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116; }
+    @font-face { font-family: "RaptorDisplay"; font-weight: 700; src: url("assets/fonts/oswald-lat.woff2") format("woff2"); unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD, U+00D7; }
+    @font-face { font-family: "RaptorText"; font-weight: 100 900; src: url("assets/fonts/inter-cyr.woff2") format("woff2"); unicode-range: U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116; }
+    @font-face { font-family: "RaptorText"; font-weight: 100 900; src: url("assets/fonts/inter-lat.woff2") format("woff2"); unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD, U+00D7;}
+    #root { position: absolute; inset: 0; overflow: hidden; font-family: "RaptorText", sans-serif; color: #f5f3ef; }
+    .scrim-b { position: absolute; left: 0; top: 900px; width: 1080px; height: 1020px; background: linear-gradient(to bottom, rgba(8,8,10,0) 0%, rgba(8,8,10,0.78) 45%, rgba(8,8,10,0.9) 100%); }
+    .scrim-t { position: absolute; left: 0; top: 0; width: 1080px; height: 760px; background: linear-gradient(to top, rgba(8,8,10,0) 0%, rgba(8,8,10,0.8) 70%); }
+    .feat { position: absolute; left: 120px; bottom: 690px; width: 660px; }
+    .idx { font-family: "RaptorDisplay", sans-serif; font-weight: 700; font-size: 44px; color: #ff6a13; letter-spacing: 0.08em; }
+    .label { font-family: "RaptorDisplay", sans-serif; font-weight: 700; font-size: 112px; line-height: 1.02; text-transform: uppercase; margin-top: 12px; }
+    .label span { display: inline-block; }
+    .bar { width: 140px; height: 10px; background: #ff6a13; margin-top: 28px; transform-origin: 0 50%; }
+    #hook-glow { position: absolute; left: 95px; top: 460px; width: 1000px; height: 1000px; border-radius: 50%; background: radial-gradient(circle, rgba(190,225,255,0.85) 0%, rgba(120,180,255,0.25) 30%, rgba(120,180,255,0) 62%); mix-blend-mode: screen; }
+    #hook-kicker { position: absolute; left: 120px; top: 300px; width: 768px; text-align: center; font-weight: 600; font-size: 34px; letter-spacing: 0.42em; color: rgba(245,243,239,0.8); }
+    #hook-brand { position: absolute; left: 120px; top: 345px; width: 768px; text-align: center; font-family: "RaptorDisplay", sans-serif; font-weight: 700; font-size: 220px; line-height: 1; letter-spacing: 0.02em; }
+    #hook-brand { white-space: nowrap; }
+    #hook-brand span { display: inline-block; }
+  </style>
+  <div id="root" data-composition-id="hook" data-width="1080" data-height="1920">
+    <div id="hook-glow" data-layout-allow-overflow class="clip" data-start="0" data-duration="2.4" data-track-index="0"></div>
+    <div id="hook-scrim-t" class="scrim-t clip" data-start="0" data-duration="2.4" data-track-index="1"></div>
+    <div id="hook-scrim-b" class="scrim-b clip" data-start="0" data-duration="2.4" data-track-index="1"></div>
+    <div id="hook-kicker" class="clip" data-start="0" data-duration="2.4" data-track-index="2">ASIAN RAPTOR</div>
+    <div id="hook-brand" class="clip" data-start="0" data-duration="2.4" data-track-index="3"><span>R</span><span>A</span><span>P</span><span>T</span><span>O</span><span>R</span></div>
+    <div id="hook-feat" class="feat clip" data-start="0" data-duration="2.4" data-track-index="4">
+      <div id="hook-idx" class="idx">01</div>
+      <div id="hook-label" class="label"><span>LED-оптика</span></div>
+      <div id="hook-bar" class="bar"></div>
+    </div>
+  </div>
+  <script>
+    const tl = gsap.timeline({ paused: true });
+    // Headlight ignition: two quick flickers, then the glow settles.
+    tl.fromTo("#hook-glow", { opacity: 0.15 }, { opacity: 0.9, duration: 0.08, ease: "none" }, 0.12);
+    tl.to("#hook-glow", { opacity: 0.25, duration: 0.08, ease: "none" }, 0.2);
+    tl.to("#hook-glow", { opacity: 1, duration: 0.1, ease: "none" }, 0.32);
+    tl.to("#hook-glow", { opacity: 0.45, duration: 0.6, ease: "power2.out" }, 0.42);
+    // Brand name, letter by letter (already partly visible on frame 0).
+    tl.fromTo("#hook-brand span", { opacity: 0.3, filter: "blur(6px)" }, { opacity: 1, filter: "blur(0px)", duration: 0.2, ease: "power2.out", stagger: 0.1 }, 0);
+    tl.fromTo("#hook-kicker", { opacity: 0 }, { opacity: 1, duration: 0.3, ease: "power2.out" }, 0.5);
+    // Feature label.
+    tl.fromTo("#hook-idx", { opacity: 0, filter: "blur(6px)" }, { opacity: 1, filter: "blur(0px)", duration: 0.15, ease: "power4.out" }, 0.9);
+    tl.fromTo("#hook-label span", { opacity: 0, filter: "blur(8px)" }, { opacity: 1, filter: "blur(0px)", duration: 0.18, ease: "power4.out" }, 0.97);
+    tl.fromTo("#hook-bar", { scaleX: 0 }, { scaleX: 1, duration: 0.4, ease: "expo.out" }, 1.05);
+    // Exit with the whip.
+    tl.to(["#hook-feat", "#hook-brand", "#hook-kicker"], { opacity: 0, filter: "blur(10px)", duration: 0.18, ease: "power3.in" }, 2.12);
+    tl.to("#hook-glow", { opacity: 0, duration: 0.15, ease: "power3.in" }, 2.15);
+    window.__timelines["hook"] = tl;
+  </script>
+</template>
