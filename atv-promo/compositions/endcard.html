@@ -18,6 +18,8 @@
     #end-brand { white-space: nowrap; }
     #end-brand span { display: inline-block; }
     #end-model { position: absolute; left: 150px; top: 800px; width: 600px; height: 110px; background: #e01e2b; text-align: center; font-family: "RaptorDisplay", sans-serif; font-weight: 700; font-size: 80px; line-height: 110px; letter-spacing: 0.04em; transform-origin: 50% 50%; }
+    #end-tags span { display: inline-block; }
+    #end-tags { font-feature-settings: "calt" 0; position: absolute; left: 120px; top: 1100px; width: 660px; text-align: center; font-weight: 600; font-size: 34px; line-height: 1.35; color: rgba(245,243,239,0.85); }
     #end-cta { position: absolute; left: 120px; top: 960px; width: 660px; height: 110px; border-radius: 55px; background: #ff6a13; color: #08080a; text-align: center; font-weight: 800; font-size: 46px; line-height: 110px; }
   </style>
   <div id="root" data-composition-id="endcard" data-width="1080" data-height="1920">
@@ -26,6 +28,7 @@
     <div id="end-brand" class="clip" data-start="0" data-duration="3.4" data-track-index="2"><span>R</span><span>A</span><span>P</span><span>T</span><span>O</span><span>R</span></div>
     <div id="end-model" class="clip" data-start="0" data-duration="3.4" data-track-index="3">ATV 4×4 700</div>
     <div id="end-cta" class="clip" data-start="0" data-duration="3.4" data-track-index="4">Узнай цену в директ</div>
+    <div id="end-tags" class="clip" data-start="0" data-duration="3.4" data-track-index="5"><span>#квадроцикл</span> <span>#RaptorATV</span><br /><span>#4x4</span> <span>#бездорожье</span></div>
   </div>
   <script>
     const tl = gsap.timeline({ paused: true });
@@ -36,6 +39,8 @@
     // Model plate stamps in like the banner.
     tl.fromTo("#end-model", { opacity: 0, scaleX: 0 }, { opacity: 1, scaleX: 1, duration: 0.45, ease: "expo.out" }, 0.75);
     tl.fromTo("#end-cta", { opacity: 0, y: 30, filter: "blur(6px)" }, { opacity: 1, y: 0, filter: "blur(0px)", duration: 0.35, ease: "expo.out" }, 1.0);
+    // Hashtags, word by word, after the CTA lands.
+    tl.fromTo("#end-tags span", { opacity: 0, filter: "blur(6px)" }, { opacity: 1, filter: "blur(0px)", duration: 0.15, ease: "power4.out", stagger: 0.09 }, 1.2);
     window.__timelines["endcard"] = tl;
   </script>
 </template>
